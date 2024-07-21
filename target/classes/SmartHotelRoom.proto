@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.example.smarthotel";
+option java_outer_classname = "SmartHotelRoomLightProto";
+
+package SmartHotelRoom;
+
+// The service for the smart room which is to control the light
+service SmartHotelRoomLight {
+    // RPC to turn on the light
+    rpc TurnonLights (LightRequest) returns (LightResponse) {}
+
+    // RPC to turn off the lights
+    rpc TurnoffLights (LightRequest) returns (LightResponse) {}
+}
+
+// Request message containing the room area
+message LightRequest {
+    string roomarea = 1;
+}
+
+// Response message containing the result of whether the light was switched on or off
+message LightResponse {
+    bool success = 1;
+}
