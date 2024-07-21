@@ -22,7 +22,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.15.0)",
-    comments = "Source: SmartHotelRoom.proto")
+    comments = "Source: SmartHotelRoomLight.proto")
 public final class SmartHotelRoomLightGrpc {
 
   private SmartHotelRoomLightGrpc() {}
