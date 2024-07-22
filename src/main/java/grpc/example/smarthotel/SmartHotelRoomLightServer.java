@@ -17,20 +17,20 @@ public class SmartHotelRoomLightServer  extends SmartHotelRoomLightGrpc.SmartHot
 	
 public static void main (String [] args) {
 	
-	SmartHotelRoomLightServer lightServer = new SmartHotelRoomLightServer();
+	SmartHotelRoomLightServer lightServer = new SmartHotelRoomLightServer(); //creating a new instance of lightserver
 	
-	int port =50051;
+	int port =50051; // the port we are using 
 	
 	try {
 		Server server = ServerBuilder.forPort(port)
 				.addService(lightServer)
 				.build()
 				.start();
-		logger.info("Server started, listening on " + port);
+		logger.info("Server started, listening on " + port); // print stament using logger 
 		
         server.awaitTermination();
     } catch (IOException | InterruptedException e) {
-    	 logger.severe(" There was an error  when starting the server: " + e.getMessage());
+    	 logger.severe(" There was an error  when starting the server: " + e.getMessage()); // print statement using logger
     }
 }
 	
