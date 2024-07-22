@@ -54,8 +54,11 @@ public static void main (String [] args) {
     public void turnoffLights(LightRequest request, StreamObserver<LightResponse> responseObserver) {
 		logger.info("Received TurnoffLights request for: " + request.getRoomarea());
 
-        // Here you would have the logic to turn off the lights
-        boolean success = true; // Simulate success
+       
+		// to turn off the light
+		
+		
+        boolean success = true; // to show that it is successful
 
         LightResponse response = LightResponse.newBuilder()
                 .setSuccess(success)
