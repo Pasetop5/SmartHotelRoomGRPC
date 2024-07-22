@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.example.smarthotelroomservice";
+option java_outer_classname = "RoomService2";
+
+service SmartHotelRoomService {
+  // RPC method to subscribe for room service updates
+  rpc SubscribeForRoomServicesUpdates(RoomServiceRequest) returns (stream RoomServiceUpdate);
+
+  // RPC method to stream updates on room components
+  rpc RoomServicesComponent(RoomComponentRequest) returns (stream RoomComponentUpdate);
+}
+
+message RoomServiceRequest {
+  string roomid = 1;
+}
+
+message RoomServiceUpdate {
+  string status = 1;
+  string message = 2;
+}
+
+message RoomComponentRequest {
+  string roomid = 1;
+}
+
+message RoomComponentUpdate {
+  string type = 1;
+  string status = 2;
+}
