@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.example.smarthotelroomperformance"; // this will help enable multiple java files
+option java_outer_classname = "RoomPerformance3"; // the outer class name 
+
+package grpc.example.smarthotelroomperformance;
+
+service HotelRoomPerformance {
+    rpc AdjustRoomSettings (stream SettingRoomRequest) returns (SettingRoomResponse);
+    rpc ControlRoomFeatures (stream ControlRoomRequest) returns (stream ControlRoomResponse);
+}
+
+message SettingRoomRequest {
+    string setting_type = 1;
+    string value = 2;
+}
+
+message SettingRoomResponse {
+    string message = 1;
+}
+
+message ControlRoomRequest {
+    string control_type = 1;
+    string action = 2;
+}
+
+message ControlRoomResponse {
+    string status = 1;
+    string error_message = 2;
+}
