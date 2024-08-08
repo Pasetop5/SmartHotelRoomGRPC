@@ -1,7 +1,9 @@
 grpc/example/smarthotelroomservice/SmartHotelRoomServiceServer$SmartHotelRoomServiceImpl.class
+GuiApp/SmartHotelRoomApp$2.class
 grpc/example/smarthotelRoomLight/LightRequest$Builder.class
 grpc/example/smarthotelroomperformance/HotelRoomPerformanceServer$HotelRoomPerformanceServiceImpl.class
 grpc/example/smarthotelroomperformance/ControlRoomRequest.class
+GuiApp/ServiceDiscovery$1.class
 grpc/example/smarthotelRoomLight/SmartHotelRoomLightClient.class
 grpc/example/smarthotelroomperformance/ControlRoomResponseOrBuilder.class
 grpc/example/smarthotelroomperformance/HotelRoomPerformanceGrpc$HotelRoomPerformanceBlockingStub.class
@@ -32,6 +34,7 @@ grpc/example/smarthotelroomperformance/SettingRoomRequest$1.class
 grpc/example/smarthotelroomservice/SmartHotelRoomServiceClient.class
 grpc/example/smarthotelroomperformance/SettingRoomResponseOrBuilder.class
 grpc/example/smarthotelroomperformance/SettingRoomResponse.class
+GuiApp/Serviceregistration.class
 grpc/example/smarthotelroomperformance/HotelRoomPerformanceGrpc$HotelRoomPerformanceStub.class
 grpc/example/smarthotelroomservice/SmartHotelRoomServiceGrpc$SmartHotelRoomServiceStub.class
 grpc/example/smarthotelroomperformance/HotelRoomPerformanceServer$HotelRoomPerformanceServiceImpl$1.class
@@ -74,12 +77,14 @@ grpc/example/smarthotelroomperformance/HotelRoomPerformanceClient$2.class
 grpc/example/smarthotelRoomLight/SmartHotelRoomLightProto$1.class
 grpc/example/smarthotelroomservice/SmartHotelRoomServiceGrpc.class
 GuiApp/SmartHotelRoomApp$1.class
+grpc/example/smarthotelRoomLight/GetRequestLight.class
 GuiApp/SmartHotelRoomApp.class
 grpc/example/smarthotelroomservice/RoomComponentUpdate.class
 grpc/example/smarthotelroomservice/RoomComponentUpdate$1.class
 grpc/example/smarthotelRoomLight/SmartHotelRoomLightProto.class
 grpc/example/smarthotelroomservice/RoomComponentRequest$1.class
 grpc/example/smarthotelroomservice/RoomServiceUpdate$Builder.class
+GuiApp/ServiceDiscovery.class
 grpc/example/smarthotelRoomLight/SmartHotelRoomLightGrpc$SmartHotelRoomLightBaseDescriptorSupplier.class
 grpc/example/smarthotelroomperformance/HotelRoomPerformanceGrpc.class
 grpc/example/smarthotelroomservice/SmartHotelRoomServiceGrpc$SmartHotelRoomServiceBlockingStub.class

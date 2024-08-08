@@ -1,3 +1,4 @@
+/Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/GuiApp/Serviceregistration.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/SettingRoomRequestOrBuilder.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomservice/RoomServiceUpdateOrBuilder.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/RoomPerformance3.java
@@ -12,6 +13,7 @@
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomservice/RoomServiceUpdate.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/HotelRoomPerformanceServer.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/HotelRoomPerformanceGrpc.java
+/Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelRoomLight/GetRequestLight.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/SettingRoomResponse.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelRoomLight/SmartHotelRoomLightProto.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomperformance/SettingRoomResponseOrBuilder.java
@@ -31,3 +33,4 @@
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelroomservice/RoomServiceRequest.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelRoomLight/LightRequestOrBuilder.java
 /Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/grpc/example/smarthotelRoomLight/LightRequest.java
+/Users/admin/eclipse-workspace/SmartHotelRoomGRPC/src/main/java/GuiApp/ServiceDiscovery.java
