@@ -34,13 +34,13 @@ public class SmartHotelRoomLightClient {
         	LightRequest requestturnon = LightRequest.newBuilder().setRoomarea(roomareaturnon).build();
         	LightResponse responseturnon = blockingstub.turnonLights(requestturnon);
         	
-        	logger.info("'Turn on the lights in "  + roomareaturnon + ":" + responseturnon.getSuccess());
+        	logger.info("The light in the  "  + roomareaturnon + " was turned on");
 
             // Turn off the light with a focus on the bathroom
             String roomAreaTurnOff = "Bathroom";
             LightRequest requestTurnOff = LightRequest.newBuilder().setRoomarea(roomAreaTurnOff).build();
             LightResponse responseTurnOff = blockingstub.turnoffLights(requestTurnOff);
-            logger.info("Turn off the lights in " + roomAreaTurnOff + ": " + responseTurnOff.getSuccess());
+            logger.info("The light in the " + roomAreaTurnOff + " was turned off  ");
 
         } catch (StatusRuntimeException e) {
         	

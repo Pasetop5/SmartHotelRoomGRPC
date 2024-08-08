@@ -1,5 +1,7 @@
 package grpc.example.smarthotelroomperformance;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +14,7 @@ public class HotelRoomPerformanceClient {
     private final ManagedChannel channel;
     private final HotelRoomPerformanceGrpc.HotelRoomPerformanceStub asyncStub;
 
-    // creating the constructor 
+    // Constructor to initialize the gRPC channel and stub
     public HotelRoomPerformanceClient(String host, int port) {
         this.channel = ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext()
@@ -20,15 +22,16 @@ public class HotelRoomPerformanceClient {
         this.asyncStub = HotelRoomPerformanceGrpc.newStub(channel);
     }
 
-    // method to adjust the room setting using client streaming
+    // Method to adjust the room settings using client streaming
     public void adjustRoomSettings() throws InterruptedException {
         final CountDownLatch finishLatch = new CountDownLatch(1);
+        final Set<String> messages = new HashSet<>();
 
         // StreamObserver for handling responses from the server
         StreamObserver<SettingRoomRequest> requestObserver = asyncStub.adjustRoomSettings(new StreamObserver<SettingRoomResponse>() {
             @Override
             public void onNext(SettingRoomResponse response) {
-                System.out.println("Response: " + response.getMessage());
+                messages.add(response.getMessage());
             }
 
             @Override
@@ -39,6 +42,8 @@ public class HotelRoomPerformanceClient {
 
             @Override
             public void onCompleted() {
+                // Print unique messages
+                System.out.println("Message: " + String.join("; ", messages));
                 System.out.println("All the settings have been adjusted in the room.");
                 finishLatch.countDown();
             }
@@ -64,27 +69,30 @@ public class HotelRoomPerformanceClient {
     // Method to control room features using bidirectional streaming
     public void controlRoomFeatures() throws InterruptedException {
         final CountDownLatch finishLatch = new CountDownLatch(1);
+        final Set<String> messages = new HashSet<>();
 
         // Using StreamObserver to handle the response from the server 
         StreamObserver<ControlRoomRequest> requestObserver = asyncStub.controlRoomFeatures(new StreamObserver<ControlRoomResponse>() {
             @Override
             public void onNext(ControlRoomResponse response) {
-                String errorMessage = response.getErrorMessage();
-                if (errorMessage == null || errorMessage.isEmpty()) {
-                    errorMessage = "There were no errors.";
-                }
-                System.out.println("Response: Status=" + response.getStatus() + ", ErrorMessage=" + errorMessage);
+                String message = (response.getErrorMessage() == null || response.getErrorMessage().isEmpty())
+                        ? "Room features applied successfully."
+                        : "Error: " + response.getErrorMessage();
+
+                messages.add(message);
             }
 
             @Override
             public void onError(Throwable t) {
-                System.err.println("Error in controlRoomFeatures: " + t);
+                System.err.println("There was a problem in controlling the RoomFeatures: " + t);
                 finishLatch.countDown();
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("All controls have been applied in the room.");
+                // Print unique messages
+                System.out.println("Message: " + String.join("; ", messages));
+                System.out.println("All controls have been applied in the hotel room.");
                 finishLatch.countDown();
             }
         });
@@ -106,7 +114,7 @@ public class HotelRoomPerformanceClient {
         }
     }
 
-    // To shut down the gRPC channel
+    // Method to shut down the gRPC channel
     public void shutdown() {
         if (channel != null && !channel.isShutdown()) {
             channel.shutdown();

@@ -158,10 +158,10 @@ public class SmartHotelRoomApp extends JFrame {
         try {
             if (turnOn) {
                 response = lightBlockingStub.turnonLights(request);
-                SwingUtilities.invokeLater(() -> resultForLight.setText("The light has been turned on in " + roomArea + ": " + response.getSuccess()));
+                SwingUtilities.invokeLater(() -> resultForLight.setText("The light has been turned on in the " + roomArea ));
             } else {
                 response = lightBlockingStub.turnoffLights(request);
-                SwingUtilities.invokeLater(() -> resultForLight.setText("The light has been turned off in " + roomArea + ": " + response.getSuccess()));
+                SwingUtilities.invokeLater(() -> resultForLight.setText("The light has been turned off in the " + roomArea ));
             }
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
@@ -186,12 +186,12 @@ public class SmartHotelRoomApp extends JFrame {
             @Override
             public void onError(Throwable t) {
                 logger.log(Level.SEVERE, "Room service update error", t);
-                SwingUtilities.invokeLater(() -> roomServicesButton.setText("Error receiving updates."));
+                SwingUtilities.invokeLater(() -> roomServicesButton.setText("There was an error when receiving updates."));
             }
 
             @Override
             public void onCompleted() {
-                SwingUtilities.invokeLater(() -> roomServicesButton.setText("Room updates completed."));
+                SwingUtilities.invokeLater(() -> roomServicesButton.setText("The Room updates has been completed."));
             }
         };
 
@@ -208,7 +208,7 @@ public class SmartHotelRoomApp extends JFrame {
                     performanceClient.controlRoomFeatures();
                 } catch (InterruptedException e) {
                     logger.log(Level.SEVERE, "Room performance error", e);
-                    SwingUtilities.invokeLater(() -> performanceTextField.setText("Error in room performance settings."));
+                    SwingUtilities.invokeLater(() -> performanceTextField.setText("There was an error in room performance settings."));
                     Thread.currentThread().interrupt();
                 }
                 return null;
@@ -216,7 +216,7 @@ public class SmartHotelRoomApp extends JFrame {
 
             @Override
             protected void done() {
-                SwingUtilities.invokeLater(() -> performanceTextField.setText("Room performance settings applied successfully."));
+                SwingUtilities.invokeLater(() -> performanceTextField.setText("The room contols and room features was applied successfully"));
             }
         }.execute();
     }
