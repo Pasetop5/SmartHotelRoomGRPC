@@ -36,7 +36,7 @@ public class SmartHotelRoomLightClient {
         	
         	logger.info("The light in the  "  + roomareaturnon + " was turned on");
 
-            // Turn off the light with a focus on the bathroom
+            // Turn off the light with a focus on the bedroom
             String roomAreaTurnOff = "Bedroom";
             LightRequest requestTurnOff = LightRequest.newBuilder().setRoomarea(roomAreaTurnOff).build();
             LightResponse responseTurnOff = blockingstub.turnoffLights(requestTurnOff);

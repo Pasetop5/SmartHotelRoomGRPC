@@ -4,8 +4,13 @@
   <artifactId>SmartHotelRoomGRPC</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>SmartHotelRoomGRPC</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+  </properties>
   
-   
   <dependencies>
     <dependency>
       <groupId>com.google.protobuf</groupId>
@@ -37,36 +42,33 @@
       <artifactId>guava</artifactId>
       <version>28.2-jre</version>
     </dependency>
-
     <dependency>
       <groupId>javax.annotation</groupId>
       <artifactId>javax.annotation-api</artifactId>
       <version>1.2</version>
     </dependency>
     <dependency>
-    	<groupId>com.learn</groupId>
-    	<artifactId>jmDNSTest</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+      <groupId>com.learn</groupId>
+      <artifactId>jmDNSTest</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jmdns</groupId>
+      <artifactId>jmdns</artifactId>
+      <version>3.5.5</version>
     </dependency>
   </dependencies>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-  </properties>
 
   <build>
     <defaultGoal>clean generate-sources compile install</defaultGoal>
 
     <plugins>
- 
       <plugin>
         <groupId>com.github.os72</groupId>
         <artifactId>protoc-jar-maven-plugin</artifactId>
         <version>3.6.0.1</version>
         <executions>
-			       <execution>
+          <execution>
             <phase>generate-sources</phase>
             <goals>
               <goal>run</goal>

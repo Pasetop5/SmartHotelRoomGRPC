@@ -42,7 +42,7 @@ public class HotelRoomPerformanceClient {
 
             @Override
             public void onCompleted() {
-                // Print unique messages
+                // Print  messages
                 System.out.println("Message: " + String.join("; ", messages));
                 System.out.println("All the settings have been adjusted in the room.");
                 finishLatch.countDown();

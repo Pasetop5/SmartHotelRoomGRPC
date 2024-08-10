@@ -33,7 +33,7 @@ public class HotelRoomPerformanceServer {
 
                 @Override
                 public void onNext(SettingRoomRequest request) {
-                    // Process each setting request and append the response message to it
+                    // to Process each setting request and append the response message to it
                     responseMessageBuilder.append("Setting ")
                             .append(request.getSettingType())
                             .append(" adjusted to ")
@@ -43,13 +43,13 @@ public class HotelRoomPerformanceServer {
 
                 @Override
                 public void onError(Throwable t) {
-                    // Catch any error during the process
+                    // to  Catch any error during the process
                     System.err.println("Error in adjustRoomSettings: " + t);
                 }
 
                 @Override
                 public void onCompleted() {
-                    // Send a response after processing all requests
+                    //  to Send a response after processing all requests
                     SettingRoomResponse response = SettingRoomResponse.newBuilder()
                             .setMessage(responseMessageBuilder.toString())
                             .build();
@@ -58,7 +58,7 @@ public class HotelRoomPerformanceServer {
                 }
             };
         }
-
+// for control room features 
         @Override
         public StreamObserver<ControlRoomRequest> controlRoomFeatures(StreamObserver<ControlRoomResponse> responseObserver) {
             return new StreamObserver<ControlRoomRequest>() {

@@ -7,16 +7,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import grpc.example.smarthotelRoomLight.LightRequest;
-import grpc.example.smarthotelRoomLight.LightResponse;
-import grpc.example.smarthotelRoomLight.SmartHotelRoomLightGrpc;
-import grpc.example.smarthotelRoomLight.SmartHotelRoomLightGrpc.SmartHotelRoomLightBlockingStub;
 import grpc.example.smarthotelroomservice.RoomComponentRequest;
 import grpc.example.smarthotelroomservice.RoomComponentUpdate;
+import grpc.example.smarthotelroomservice.RoomServiceRequest;
+import grpc.example.smarthotelroomservice.RoomServiceUpdate;
 import grpc.example.smarthotelroomservice.SmartHotelRoomServiceGrpc;
 import grpc.example.smarthotelroomservice.SmartHotelRoomServiceGrpc.SmartHotelRoomServiceStub;
 import grpc.example.smarthotelroomperformance.HotelRoomPerformanceClient;
@@ -24,19 +23,26 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import grpc.example.smarthotelRoomLight.LightRequest;
+import grpc.example.smarthotelRoomLight.LightResponse;
+import grpc.example.smarthotelRoomLight.SmartHotelRoomLightGrpc;
+import grpc.example.smarthotelRoomLight.SmartHotelRoomLightGrpc.SmartHotelRoomLightBlockingStub;
 
 public class SmartHotelRoomApp extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private JTextField resultForLight;
-    private JTextField roomServicesButton;
-    private JTextField performanceTextField;
-    private ManagedChannel lightChannel;
+    private JTextArea roomServicesTextArea;
+    private JTextArea roomComponentsTextArea;
+    private JTextArea performanceTextArea;
     private ManagedChannel roomServiceChannel;
-    private SmartHotelRoomLightBlockingStub lightBlockingStub;
     private SmartHotelRoomServiceStub roomServiceStub;
     private HotelRoomPerformanceClient performanceClient;
+    
+    private JTextField resultForLight;
+    private ManagedChannel lightChannel;
+    private SmartHotelRoomLightBlockingStub lightBlockingStub;
+
     private static final Logger logger = Logger.getLogger(SmartHotelRoomApp.class.getName());
 
     public static void main(String[] args) {
@@ -65,7 +71,7 @@ public class SmartHotelRoomApp extends JFrame {
         contentPane.add(lblLightController);
 
         resultForLight = new JTextField();
-        resultForLight.setBounds(184, 36, 488, 117);
+        resultForLight.setBounds(197, 6, 488, 117);
         contentPane.add(resultForLight);
         resultForLight.setColumns(10);
 
@@ -75,30 +81,47 @@ public class SmartHotelRoomApp extends JFrame {
 
         // Room Service Components
         JLabel lblRoomService = new JLabel("Room Service");
-        lblRoomService.setBounds(6, 157, 115, 16);
+        lblRoomService.setBounds(23, 107, 115, 16);
         contentPane.add(lblRoomService);
 
         JToggleButton roomServiceButton = new JToggleButton("Provide Updates for Room Service");
-        roomServiceButton.setBounds(6, 185, 243, 29);
+        roomServiceButton.setBounds(6, 128, 243, 29);
         contentPane.add(roomServiceButton);
 
-        roomServicesButton = new JTextField();
-        roomServicesButton.setBounds(169, 226, 503, 170);
-        contentPane.add(roomServicesButton);
-        roomServicesButton.setColumns(10);
+        roomServicesTextArea = new JTextArea();
+        roomServicesTextArea.setBounds(169, 169, 503, 170);
+        contentPane.add(roomServicesTextArea);
+        roomServicesTextArea.setLineWrap(true);
+        roomServicesTextArea.setWrapStyleWord(true);
+
+        // Room Component Components
+        JLabel lblRoomComponents = new JLabel("Room Components");
+        lblRoomComponents.setBounds(17, 347, 147, 16);
+        contentPane.add(lblRoomComponents);
+
+        roomComponentsTextArea = new JTextArea();
+        roomComponentsTextArea.setBounds(169, 405, 503, 170);
+        contentPane.add(roomComponentsTextArea);
+        roomComponentsTextArea.setLineWrap(true);
+        roomComponentsTextArea.setWrapStyleWord(true);
+
+        JToggleButton roomComponentButton = new JToggleButton("Room features updates");
+        roomComponentButton.setBounds(6, 364, 243, 29);
+        contentPane.add(roomComponentButton);
 
         // Room Performance Components
         JLabel lblRoomPerformance = new JLabel("Room Performance");
-        lblRoomPerformance.setBounds(6, 413, 147, 16);
+        lblRoomPerformance.setBounds(6, 582, 147, 16);
         contentPane.add(lblRoomPerformance);
 
-        performanceTextField = new JTextField();
-        performanceTextField.setBounds(174, 495, 533, 170);
-        contentPane.add(performanceTextField);
-        performanceTextField.setColumns(10);
+        performanceTextArea = new JTextArea();
+        performanceTextArea.setBounds(169, 651, 503, 170);
+        contentPane.add(performanceTextArea);
+        performanceTextArea.setLineWrap(true);
+        performanceTextArea.setWrapStyleWord(true);
 
         JToggleButton togglePerformanceButton = new JToggleButton("Room Performance communication");
-        togglePerformanceButton.setBounds(0, 454, 250, 29);
+        togglePerformanceButton.setBounds(-1, 610, 250, 29);
         contentPane.add(togglePerformanceButton);
 
         // Event Listeners
@@ -112,8 +135,8 @@ public class SmartHotelRoomApp extends JFrame {
             }
         }));
 
-        roomServiceButton.addActionListener(e -> SwingUtilities.invokeLater(() ->
-            subscribeForRoomServiceUpdates("101")));
+        roomServiceButton.addActionListener(e -> SwingUtilities.invokeLater(() -> subscribeForRoomServiceUpdates("101")));
+        roomComponentButton.addActionListener(e -> SwingUtilities.invokeLater(() -> subscribeForRoomComponentsUpdates("101")));
 
         togglePerformanceButton.addActionListener(e -> SwingUtilities.invokeLater(() -> {
             if (togglePerformanceButton.isSelected()) {
@@ -128,11 +151,10 @@ public class SmartHotelRoomApp extends JFrame {
         initializeGrpcConnections();
     }
 
-    // Initializing gRPC connections for the light, room service, and performance components
     private void initializeGrpcConnections() {
         String host = "localhost";
-        int portLight = 50051;
         int portRoomService = 50057;
+        int portLight = 50051;
         int portPerformance = 8080;
 
         // Setting gRPC for light control
@@ -150,8 +172,9 @@ public class SmartHotelRoomApp extends JFrame {
         // Setting gRPC for room performance
         performanceClient = new HotelRoomPerformanceClient(host, portPerformance);
     }
+    
+    // to handle light contol
 
-    // Handling the control for turning on and off the light
     private void handleLightControl(String roomArea, boolean turnOn) {
         LightRequest request = LightRequest.newBuilder().setRoomarea(roomArea).build();
         LightResponse response;
@@ -169,36 +192,68 @@ public class SmartHotelRoomApp extends JFrame {
         }
     }
 
-    // Subscribing for room service updates
+    
+    // to suscribe to room update
     private void subscribeForRoomServiceUpdates(String roomId) {
+        RoomServiceRequest request = RoomServiceRequest.newBuilder().setRoomid(roomId).build();
+        final StringBuilder updates = new StringBuilder();
+
+        StreamObserver<RoomServiceUpdate> responseObserver = new StreamObserver<RoomServiceUpdate>() {
+            @Override
+            public void onNext(RoomServiceUpdate update) {
+                updates.append("Service Status: ").append(update.getStatus())
+                       .append(", Message: ").append(update.getMessage())
+                       .append("\n");
+                SwingUtilities.invokeLater(() -> roomServicesTextArea.setText(updates.toString()));
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                logger.log(Level.SEVERE, "Room service update error", t);
+                SwingUtilities.invokeLater(() -> roomServicesTextArea.setText("There was an error when receiving updates."));
+            }
+
+            @Override
+            public void onCompleted() {
+                SwingUtilities.invokeLater(() -> roomServicesTextArea.append("Room service updates have been completed."));
+            }
+        };
+
+        roomServiceStub.subscribeForRoomServicesUpdates(request, responseObserver);
+    }
+
+    
+    // to sucribe to room component 
+    private void subscribeForRoomComponentsUpdates(String roomId) {
         RoomComponentRequest request = RoomComponentRequest.newBuilder().setRoomid(roomId).build();
         final StringBuilder updates = new StringBuilder();
 
         StreamObserver<RoomComponentUpdate> responseObserver = new StreamObserver<RoomComponentUpdate>() {
             @Override
             public void onNext(RoomComponentUpdate update) {
-                updates.append("Type: ").append(update.getType())
+                updates.append("Component Type: ").append(update.getType())
                        .append(", Status: ").append(update.getStatus())
                        .append("\n");
-                SwingUtilities.invokeLater(() -> roomServicesButton.setText(updates.toString()));
+                SwingUtilities.invokeLater(() -> roomComponentsTextArea.setText(updates.toString()));
             }
 
             @Override
             public void onError(Throwable t) {
-                logger.log(Level.SEVERE, "Room service update error", t);
-                SwingUtilities.invokeLater(() -> roomServicesButton.setText("There was an error when receiving updates."));
+                logger.log(Level.SEVERE, "Room component update error", t);
+                SwingUtilities.invokeLater(() -> roomComponentsTextArea.setText("There was an error when receiving updates."));
             }
 
             @Override
             public void onCompleted() {
-                SwingUtilities.invokeLater(() -> roomServicesButton.setText("The Room updates has been completed."));
+                SwingUtilities.invokeLater(() -> roomComponentsTextArea.append("Room component updates have been completed."));
             }
         };
 
         roomServiceStub.roomServicesComponent(request, responseObserver);
     }
 
-    // Start room performance operations using SwingWorker
+    
+    // for room performance
     private void startRoomPerformance() {
         new SwingWorker<Void, Void>() {
             @Override
@@ -208,7 +263,7 @@ public class SmartHotelRoomApp extends JFrame {
                     performanceClient.controlRoomFeatures();
                 } catch (InterruptedException e) {
                     logger.log(Level.SEVERE, "Room performance error", e);
-                    SwingUtilities.invokeLater(() -> performanceTextField.setText("There was an error in room performance settings."));
+                    SwingUtilities.invokeLater(() -> performanceTextArea.setText("There was an error in room performance settings."));
                     Thread.currentThread().interrupt();
                 }
                 return null;
@@ -216,12 +271,13 @@ public class SmartHotelRoomApp extends JFrame {
 
             @Override
             protected void done() {
-                SwingUtilities.invokeLater(() -> performanceTextField.setText("The room contols and room features was applied successfully"));
+                SwingUtilities.invokeLater(() -> performanceTextArea.setText("The room controls and room features were applied successfully"));
             }
         }.execute();
     }
+    
+    // to shut down
 
-    // Shutdown gRPC channels and other resources
     private void shutdownGrpcConnections() {
         if (lightChannel != null && !lightChannel.isShutdown()) {
             lightChannel.shutdown();
@@ -230,7 +286,7 @@ public class SmartHotelRoomApp extends JFrame {
             roomServiceChannel.shutdown();
         }
         if (performanceClient != null) {
-            performanceClient.shutdown();  // to shut downent
+            performanceClient.shutdown();  // to shut down
         }
     }
 

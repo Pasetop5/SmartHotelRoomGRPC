@@ -9,78 +9,103 @@ import io.grpc.stub.StreamObserver;
 
 public class SmartHotelRoomServiceClient {
 	
-
 	// the ayncStub will be making non-blockin grpc calling
-
     private final SmartHotelRoomServiceGrpc.SmartHotelRoomServiceStub asyncStub;
 
-   
-    // to create the constuctor that will intialize the async stub to chanell
+    // Constructor that initializes the asyncStub to the channel
     public SmartHotelRoomServiceClient(ManagedChannel channel) {
-    	
         asyncStub = SmartHotelRoomServiceGrpc.newStub(channel);
     }
 
-    // the method to subscribe for updates for the room services 
+    // Method to subscribe for updates for the room services 
     public void subscribeForRoomServicesUpdates(String roomId) throws InterruptedException {
     	
-    	// passing the request massage into new builder in order to suscribe to room services updates
-        RoomComponentRequest request = RoomComponentRequest.newBuilder()
-        		.setRoomid(roomId) //setting the room id in the request
+        RoomServiceRequest request = RoomServiceRequest.newBuilder()
+        		.setRoomid(roomId) // Setting the room ID in the request
         		.build(); 
         
-        // using latch to wait for the response stream to be completed
         CountDownLatch finishLatch = new CountDownLatch(1);
 
+        // Observer to handle incoming room service updates
+        StreamObserver<RoomServiceUpdate> responseObserver = new StreamObserver<RoomServiceUpdate>() {
+            @Override
+            public void onNext(RoomServiceUpdate value) {
+                // Handle each room service update received
+                System.out.println("Status: " + value.getStatus() + ", Message: " + value.getMessage());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                t.printStackTrace();
+                finishLatch.countDown(); // Indicate completion in case of error
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Room service updates have been received.");
+                finishLatch.countDown(); // Indicate the stream has ended
+            }
+        };
+
+        // Make the asyncStub call to subscribe for room services updates
+        asyncStub.subscribeForRoomServicesUpdates(request, responseObserver);
+
+        finishLatch.await(1, TimeUnit.MINUTES); // Wait for the stream to complete
+    }
+    
+    // Method to subscribe for updates for the room components
+    public void subscribeForRoomComponentsUpdates(String roomId) throws InterruptedException {
+    	
+        RoomComponentRequest request = RoomComponentRequest.newBuilder()
+        		.setRoomid(roomId) // Setting the room ID in the request
+        		.build(); 
         
-        // Observer will be handling the incoming responses
+        CountDownLatch finishLatch = new CountDownLatch(1);
+
+        // Observer to handle incoming room component updates
         StreamObserver<RoomComponentUpdate> responseObserver = new StreamObserver<RoomComponentUpdate>() {
             @Override
             public void onNext(RoomComponentUpdate value) {
-            	 // this will handle each room component update that is received 
+                // Handle each room component update received
                 System.out.println("Type: " + value.getType() + ", Status: " + value.getStatus());
             }
 
             @Override
             public void onError(Throwable t) {
-            	// to hold any errors that will occur 
                 t.printStackTrace();
-                finishLatch.countDown(); // to indicate that it has been completed
+                finishLatch.countDown(); // Indicate completion in case of error
             }
 
             @Override
             public void onCompleted() {
-            	// handling the completion
-            	
-                System.out.println("Room updates have been received.");
-                finishLatch.countDown(); // to show that the stream has ended 
+                System.out.println("Room component updates have been received.");
+                finishLatch.countDown(); // Indicate the stream has ended
             }
         };
 
-        
-        // making the asyncStub call to subscribe for the updates for the room services 
-        asyncStub.roomServicesComponent(request, responseObserver); 
-        
-        // Setting the response to a time out after 1 minutes or wait for a response
-        finishLatch.await(1, TimeUnit.MINUTES);
+        // Make the asyncStub call to subscribe for room components updates
+        asyncStub.roomServicesComponent(request, responseObserver);
+
+        finishLatch.await(1, TimeUnit.MINUTES); // Wait for the stream to complete
     }
 
     public static void main(String[] args) throws InterruptedException {
-    	// create a new channel to local host and port 
-    	
+    	// to Create a new channel to localhost and port
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 50057)
                 .usePlaintext() 
                 .build();
 
         SmartHotelRoomServiceClient client = new SmartHotelRoomServiceClient(channel);
         
-        // suscribing for room updates for room id 101
+        //  to Subscribe for room service updates for room ID 101
         System.out.println("Subscribing for updates for room service");
         client.subscribeForRoomServicesUpdates("101");
 
-        
-        // to sut down the channel and wait for the termination
+        // to Subscribe for room component updates for room ID 101
+        System.out.println("Subscribing for updates for room components");
+        client.subscribeForRoomComponentsUpdates("101");
+
+        // to Shutdown the channel and wait for termination
         channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
     }
 }        
-  
