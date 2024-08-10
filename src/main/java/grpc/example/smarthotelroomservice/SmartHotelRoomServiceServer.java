@@ -49,7 +49,8 @@ public class SmartHotelRoomServiceServer {
             
             // to iterate over updates so it can be sent to client 
             for (String[] update : updates) {
-            	
+            	  System.out.println("Processing update: " + Arrays.toString(update)); // Logging
+            	  
             	// creating the response mesage 
                 if (update.length >= 2) {
                     RoomServiceUpdate response = RoomServiceUpdate.newBuilder()

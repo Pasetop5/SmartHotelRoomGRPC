@@ -79,7 +79,7 @@ public class SmartHotelRoomApp extends JFrame {
         toggleLightButton.setBounds(6, 46, 147, 16);
         contentPane.add(toggleLightButton);
 
-        // Room Service Components
+        // Room Service 
         JLabel lblRoomService = new JLabel("Room Service");
         lblRoomService.setBounds(23, 107, 115, 16);
         contentPane.add(lblRoomService);
